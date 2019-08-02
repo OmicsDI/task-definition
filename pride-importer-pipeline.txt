@@ -1,0 +1,30 @@
+ALTER TABLE BATCH_JOB_EXECUTION_PARAMS CHANGE COLUMN STRING_VAL STRING_VAL VARCHAR(10000);
+ALTER TABLE TASK_EXECUTION_PARAMS CHANGE COLUMN TASK_PARAM TASK_PARAM VARCHAR(10000);
+
+
+
+task.ddi-generated-xml-validator=docker:omicsdi/ddi-generated-xml-validator:latest
+task.ddi-source-splitter=docker:omicsdi/ddi-source-splitter:latest
+task.ddi-dataset-importer=docker:omicsdi/ddi-dataset-importer:latest
+task.ddi-dataset-annotation=docker:omicsdi/ddi-dataset-annotation:latest
+task.ddi-dataset-enrichment=docker:omicsdi/ddi-dataset-enrichment:latest
+task.ddi-dataset-file-retriever=docker:omicsdi/ddi-dataset-file-retriever:latest
+
+ddi-pride-importer: 
+definition: 
+    ddi-generated-xml-validator && ddi-source-splitter && ddi-dataset-importer && ddi-dataset-annotation && ddi-dataset-enrichment && ddi-dataset-file-retriever
+args:
+--increment-instance-enabled=true test_id=1
+parameters:
+app.ddi-pride-importer.ddi-generated-xml-validator.validator.directory=data/pride
+app.ddi-pride-importer.ddi-generated-xml-validator.validator.report_file_path=output/pride/report.validation.file.csv
+app.ddi-pride-importer.ddi-source-splitter.splitter.input_directory=data/pride
+app.ddi-pride-importer.ddi-source-splitter.splitter.output_directory=output/pride/data
+app.ddi-pride-importer.ddi-source-splitter.splitter.file_prefix=PRIDE_EBEYE
+app.ddi-pride-importer.ddi-source-splitter.splitter.number_entries=10
+app.ddi-pride-importer.ddi-source-splitter.splitter.original_prefix=.xml
+app.ddi-pride-importer.ddi-dataset-importer.importer.database_name=Pride
+app.ddi-pride-importer.ddi-dataset-importer.importer.input_directory=output/pride/data
+app.ddi-pride-importer.ddi-dataset-annotation.annotation.database_name=Pride
+app.ddi-pride-importer.ddi-dataset-enrichment.enrichment.database_name=Pride
+app.ddi-pride-importer.ddi-dataset-file-retriever.file-retriever.database_name=Pride

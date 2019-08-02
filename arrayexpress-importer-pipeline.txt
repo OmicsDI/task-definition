@@ -1,0 +1,36 @@
+ALTER TABLE BATCH_JOB_EXECUTION_PARAMS CHANGE COLUMN STRING_VAL STRING_VAL VARCHAR(10000);
+ALTER TABLE TASK_EXECUTION_PARAMS CHANGE COLUMN TASK_PARAM TASK_PARAM VARCHAR(10000);
+
+
+
+task.arrayexpress-xml-generator=docker:omicsdi/arrayexpress-xml-generator:latest
+task.ddi-generated-xml-validator=docker:omicsdi/ddi-generated-xml-validator:latest
+task.ddi-source-splitter=docker:omicsdi/ddi-source-splitter:latest
+task.ddi-dataset-importer=docker:omicsdi/ddi-dataset-importer:latest
+task.ddi-dataset-annotation=docker:omicsdi/ddi-dataset-annotation:latest
+task.ddi-dataset-enrichment=docker:omicsdi/ddi-dataset-enrichment:latest
+task.ddi-dataset-file-retriever=docker:omicsdi/ddi-dataset-file-retriever:latest
+
+
+
+arrayexpress-importer: 
+definition: 
+    arrayexpress-xml-generator && ddi-generated-xml-validator && ddi-source-splitter && ddi-dataset-importer && ddi-dataset-annotation && ddi-dataset-enrichment && ddi-dataset-file-retriever
+args:
+--increment-instance-enabled=true test_id=2
+parameters:
+app.arrayexpress-importer.arrayexpress-xml-generator.arrayexpress.output_dir=output/arrayexpress/preprocess
+app.arrayexpress-importer.arrayexpress-xml-generator.arrayexpress.experiment_dir=data/arrayexpress/experiments
+app.arrayexpress-importer.arrayexpress-xml-generator.arrayexpress.protocol_dir=data/arrayexpress/protocols
+app.arrayexpress-importer.ddi-generated-xml-validator.validator.directory=output/arrayexpress/preprocess
+app.arrayexpress-importer.ddi-generated-xml-validator.validator.report_file_path=output/arrayexpress/report.validation.file.csv
+app.arrayexpress-importer.ddi-source-splitter.splitter.input_directory=output/arrayexpress/preprocess
+app.arrayexpress-importer.ddi-source-splitter.splitter.output_directory=output/arrayexpress/data
+app.arrayexpress-importer.ddi-source-splitter.splitter.file_prefix=ARRAY_EXPRESS_EBE
+app.arrayexpress-importer.ddi-source-splitter.splitter.number_entries=10
+app.arrayexpress-importer.ddi-source-splitter.splitter.original_prefix=arrayexpress_ebeye_export
+app.arrayexpress-importer.ddi-dataset-importer.importer.database_name=ArrayExpress
+app.arrayexpress-importer.ddi-dataset-importer.importer.input_directory=output/arrayexpress/data
+app.arrayexpress-importer.ddi-dataset-annotation.annotation.database_name=ArrayExpress
+app.arrayexpress-importer.ddi-dataset-enrichment.enrichment.database_name=ArrayExpress
+app.arrayexpress-importer.ddi-dataset-file-retriever.file-retriever.database_name=ArrayExpress
