@@ -2,6 +2,8 @@ ALTER TABLE BATCH_JOB_EXECUTION_PARAMS CHANGE COLUMN STRING_VAL STRING_VAL VARCH
 ALTER TABLE TASK_EXECUTION_PARAMS CHANGE COLUMN TASK_PARAM TASK_PARAM VARCHAR(10000);
 
 
+task.composed-task-runner=docker:omicsdi/composedtaskrunner-task:2.1.0.RELEASE
+task.composed-task-runner.metadata=maven://org.springframework.cloud.task.app:composedtaskrunner-task:jar:metadata:2.1.0.RELEASE
 
 task.arrayexpress-xml-generator=docker:omicsdi/arrayexpress-xml-generator:latest
 task.ddi-generated-xml-validator=docker:omicsdi/ddi-generated-xml-validator:latest
@@ -17,7 +19,7 @@ arrayexpress-importer:
 definition: 
     arrayexpress-xml-generator && ddi-generated-xml-validator && ddi-source-splitter && ddi-dataset-importer && ddi-dataset-annotation && ddi-dataset-enrichment && ddi-dataset-file-retriever
 args:
---increment-instance-enabled=true test_id=2
+
 parameters:
 app.arrayexpress-importer.arrayexpress-xml-generator.arrayexpress.output_dir=output/arrayexpress/preprocess
 app.arrayexpress-importer.arrayexpress-xml-generator.arrayexpress.experiment_dir=data/arrayexpress/experiments
@@ -28,7 +30,7 @@ app.arrayexpress-importer.ddi-source-splitter.splitter.input_directory=output/ar
 app.arrayexpress-importer.ddi-source-splitter.splitter.output_directory=output/arrayexpress/data
 app.arrayexpress-importer.ddi-source-splitter.splitter.file_prefix=ARRAY_EXPRESS_EBE
 app.arrayexpress-importer.ddi-source-splitter.splitter.number_entries=10
-app.arrayexpress-importer.ddi-source-splitter.splitter.original_prefix=arrayexpress_ebeye_export
+app.arrayexpress-importer.ddi-source-splitter.splitter.original_prefix=.xml
 app.arrayexpress-importer.ddi-dataset-importer.importer.database_name=ArrayExpress
 app.arrayexpress-importer.ddi-dataset-importer.importer.input_directory=output/arrayexpress/data
 app.arrayexpress-importer.ddi-dataset-annotation.annotation.database_name=ArrayExpress
