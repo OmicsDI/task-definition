@@ -1,0 +1,36 @@
+Metabolome Express
+
+ALTER TABLE BATCH_JOB_EXECUTION_PARAMS CHANGE COLUMN STRING_VAL STRING_VAL VARCHAR(10000);
+ALTER TABLE TASK_EXECUTION_PARAMS CHANGE COLUMN TASK_PARAM TASK_PARAM VARCHAR(10000);
+
+task.composed-task-runner=docker:omicsdi/composedtaskrunner-task:2.1.0.RELEASE
+task.composed-task-runner.metadata=maven://org.springframework.cloud.task.app:composedtaskrunner-task:jar:metadata:2.1.0.RELEASE
+
+task.ddi-file-downloader=docker:omicsdi/ddi-file-downloader:latest
+task.ddi-generated-xml-validator=docker:omicsdi/ddi-generated-xml-validator:latest
+task.ddi-source-splitter=docker:omicsdi/ddi-source-splitter:latest
+task.ddi-dataset-importer=docker:omicsdi/ddi-dataset-importer:latest
+task.ddi-dataset-annotation=docker:omicsdi/ddi-dataset-annotation:latest
+task.ddi-dataset-enrichment=docker:omicsdi/ddi-dataset-enrichment:latest
+task.ddi-dataset-file-retriever=docker:omicsdi/ddi-dataset-file-retriever:latest
+
+ddi-me-importer: 
+definition: 
+    ddi-file-downloader && ddi-generated-xml-validator && ddi-source-splitter && ddi-dataset-importer && ddi-dataset-annotation && ddi-dataset-enrichment && ddi-dataset-file-retriever
+args:
+
+parameters:
+app.ddi-me-importer.ddi-file-downloader.downloader.originalFileURL=https://www.metabolome-express.org/public/dataset_index.xml
+app.ddi-me-importer.ddi-file-downloader.downloader.targetFileName=data/me/dataset_index.xml
+app.ddi-me-importer.ddi-generated-xml-validator.validator.directory=data/me
+app.ddi-me-importer.ddi-generated-xml-validator.validator.report_file_path=output/me/report.validation.file.csv
+app.ddi-me-importer.ddi-source-splitter.splitter.input_directory=data/me
+app.ddi-me-importer.ddi-source-splitter.splitter.output_directory=output/me/data
+app.ddi-me-importer.ddi-source-splitter.splitter.file_prefix=ME_EBEYE
+app.ddi-me-importer.ddi-source-splitter.splitter.number_entries=10
+app.ddi-me-importer.ddi-source-splitter.splitter.original_prefix=.xml
+app.ddi-me-importer.ddi-dataset-importer.importer.database_name=MetabolomeExpress
+app.ddi-me-importer.ddi-dataset-importer.importer.input_directory=output/me/data
+app.ddi-me-importer.ddi-dataset-annotation.annotation.database_name=MetabolomeExpress
+app.ddi-me-importer.ddi-dataset-enrichment.enrichment.database_name=MetabolomeExpress
+app.ddi-me-importer.ddi-dataset-file-retriever.file-retriever.database_name=MetabolomeExpress
