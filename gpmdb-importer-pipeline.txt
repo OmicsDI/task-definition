@@ -1,0 +1,32 @@
+ALTER TABLE BATCH_JOB_EXECUTION_PARAMS CHANGE COLUMN STRING_VAL STRING_VAL VARCHAR(10000);
+ALTER TABLE TASK_EXECUTION_PARAMS CHANGE COLUMN TASK_PARAM TASK_PARAM VARCHAR(10000);
+
+
+task.composed-task-runner=docker:omicsdi/composedtaskrunner-task:2.1.0.RELEASE
+task.composed-task-runner.metadata=maven://org.springframework.cloud.task.app:composedtaskrunner-task:jar:metadata:2.1.0.RELEASE
+
+task.ddi-generated-xml-validator=docker:omicsdi/ddi-generated-xml-validator:latest
+task.ddi-dataset-importer=docker:omicsdi/ddi-dataset-importer:latest
+task.ddi-dataset-annotation=docker:omicsdi/ddi-dataset-annotation:latest
+task.ddi-dataset-enrichment=docker:omicsdi/ddi-dataset-enrichment:latest
+task.ddi-dataset-file-retriever=docker:omicsdi/ddi-dataset-file-retriever:latest
+
+
+ddi-gpmdb-importer: 
+definition: 
+    ddi-source-splitter && ddi-generated-xml-validator  && ddi-dataset-importer && ddi-dataset-annotation && ddi-dataset-enrichment && ddi-dataset-file-retriever 
+args:
+
+parameters:
+app.ddi-gpmdb-importer.ddi-generated-xml-validator.validator.directory=data/gpmdb
+app.ddi-gpmdb-importer.ddi-generated-xml-validator.validator.report_file_path=output/gpmdb/report.validation.file.csv
+app.ddi-gpmdb-importer.ddi-source-splitter.splitter.input_directory=data/gpmdb
+app.ddi-gpmdb-importer.ddi-source-splitter.splitter.output_directory=output/gpmdb/data
+app.ddi-gpmdb-importer.ddi-source-splitter.splitter.file_prefix=GPMDB_EBE
+app.ddi-gpmdb-importer.ddi-source-splitter.splitter.number_entries=10
+app.ddi-gpmdb-importer.ddi-source-splitter.splitter.original_prefix=.xml
+app.ddi-gpmdb-importer.ddi-dataset-importer.importer.database_name=GPMDB
+app.ddi-gpmdb-importer.ddi-dataset-importer.importer.input_directory=output/gpmdb/data
+app.ddi-gpmdb-importer.ddi-dataset-annotation.annotation.database_name=GPMDB
+app.ddi-gpmdb-importer.ddi-dataset-enrichment.enrichment.database_name=GPMDB
+app.ddi-gpmdb-importer.ddi-dataset-file-retriever.file-retriever.database_name=GPMDB
