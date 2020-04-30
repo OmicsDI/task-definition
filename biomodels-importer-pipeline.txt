@@ -20,7 +20,7 @@ args:
 parameters:
 app.biomodels-importer.ddi-download-ftpfiles.ftp.server=ftp.ebi.ac.uk
 app.biomodels-importer.ddi-download-ftpfiles.ftp.pattern=OmicsDIEntries
-app.biomodels-importer.ddi-download-ftpfiles.ftp.source_dir=/pub/databases/biomodels/omicsdi/BioModelsOmicsDIExport
+app.biomodels-importer.ddi-download-ftpfiles.ftp.source_dir=/ebi/ftp/pub/databases/biomodels/omicsdi/BioModelsOmicsDIExport
 app.biomodels-importer.ddi-download-ftpfiles.ftp.target_dir=data/biomodels
 app.biomodels-importer.ddi-generated-xml-validator.validator.directory=data/biomodels
 app.biomodels-importer.ddi-generated-xml-validator.validator.report_file_path=output/biomodels/report.validation.file.csv
